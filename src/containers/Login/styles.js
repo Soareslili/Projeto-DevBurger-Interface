@@ -61,6 +61,7 @@ export const Title = styled.h2`
 
   span{
     color: #9758a6;
+    font-family: "Road Rage", serif;
   }
 
 `;
@@ -93,6 +94,14 @@ export const InputContainer = styled.div`
         font-size: 18px;
         font-weight: 600;
         color: #fff;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 80%;
+        color: #cf3057;
+        font-weight: 600;
+        height: 10px;
     }
 
 `;
