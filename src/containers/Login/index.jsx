@@ -1,18 +1,19 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { api } from '../../services/api'
 import { toast } from "react-toastify";
 
 
 
-import { Container, InputContainer, LeftContainer, RightContainer, Title, Form, } from "./styles";
+import { Container, InputContainer, LeftContainer, RightContainer, Title, Form, Link} from "./styles";
 import Logo from '../../assets/logo.svg'
 import { Button } from "../../components/Button";
 
 
 export function Login() {
-
+    const navigate = useNavigate()
     const schema = yup.object({
         email: yup.string()
             .email('Digite um email válido')
@@ -34,20 +35,27 @@ export function Login() {
     console.log(errors)
 
     const onSubmit = async (data) => {
-        const response = await toast.promise(
+        const { data: {token},
+         } = await toast.promise(
             api.post('/sessions', {
                 email: data.email,
                 password: data.password,
             }),
             {
                 pending: 'Verificando seus dados',
-                success: 'Seja Bem-Vindo(a) 👌',
+                success: {
+                    render(){
+                        setTimeout(() =>{
+                            navigate('/');
+                        }, 2000);
+                        return 'Seja Bem-Vindo(a) 👌';
+                    },
+                },
                 error: 'Email ou Senha Incorretos 🤯'
             }
         )
 
-
-        console.log(response)
+        localStorage.setItem('token', token)
     }
 
 
@@ -77,7 +85,7 @@ export function Login() {
                     </InputContainer>
                     <Button type="submit">Entrar</Button>
                 </Form>
-                <p>Não possui conta? <a>Clique  aqui.!</a></p>
+                <p>Não possui conta? <Link to="/cadastro">Clique  aqui.!</Link></p>
             </RightContainer>
         </Container>
 
